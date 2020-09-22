@@ -6,7 +6,8 @@ import NavBar from "./components/NavBar";
 import Game from "./components/Game";
 import LoginOrRegister from "./components/LoginOrRegister";
 import HighScores from "./components/HighScores";
-import MyScores from "./components/MyScores";
+import Community from "./components/Community";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route exact path="/game" component={Game} />
         <Route exact path="/auth" component={LoginOrRegister} />
         <Route exact path="/high-scores" component={HighScores} />
-        <Route exact path="/my-scores" component={MyScores} />
+        <Route exact path="/community" component={Community} />
+        <Route exact path="/profile/:username" component={Profile} />
       </Router>
     </div>
   );

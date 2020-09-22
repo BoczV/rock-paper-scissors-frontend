@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Users.scss";
+import { useParams } from "react-router";
 import Axios from "axios";
 
-function MyScores() {
+function Profile() {
+  const { username } = useParams();
   const cookieValue = document.cookie.split("=")[1];
   const [statistics, setStatistics] = useState({});
 
   useEffect(() => {
-    const url = `http://localhost:8080/my-statistics/${localStorage.getItem(
-      "username"
-    )}`;
+    const url = `http://localhost:8080/my-statistics/${username}`;
     Axios.get(url, {
       withCredentials: true,
       headers: { Authorization: cookieValue },
@@ -20,10 +19,11 @@ function MyScores() {
       .catch((e) => {
         console.log(e);
       });
-  }, [cookieValue]);
+  }, [cookieValue, username]);
 
   return (
     <div>
+      <h1>Welcome to {username}'s Profile</h1>
       <table className="rwd-table">
         <thead>
           <tr>
@@ -48,4 +48,4 @@ function MyScores() {
   );
 }
 
-export default MyScores;
+export default Profile;

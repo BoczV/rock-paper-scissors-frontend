@@ -92,4 +92,21 @@ h1 {
   .head-column {
     color: #dd5;
   }
+  caption {
+    color: black;
+  }
+  a {
+    color: white;
+  }
+  a:hover {
+    color: lightsalmon;
+  }
+}
+
+.table-container {
+  display: flex;
+  justify-content: space-evenly;
+  .rwd-table {
+    left: 0;
+  }
 }

@@ -50,6 +50,7 @@ function Login(props) {
               name="email"
               title="email"
               placeholder="Username"
+              autoComplete="off"
               required
               autofocus
               onChange={(e) => setUsername(e.target.value)}
@@ -59,6 +60,7 @@ function Login(props) {
               type="password"
               name="password"
               title="password"
+              autoComplete="off"
               placeholder="Password"
               required
               onChange={(e) => setPassword(e.target.value)}

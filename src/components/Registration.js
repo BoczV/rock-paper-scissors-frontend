@@ -57,6 +57,7 @@ function Registration(props) {
               name="email"
               title="email"
               placeholder="Username"
+              autoComplete="off"
               required
               autofocus
               onChange={(e) => setUserName(e.target.value)}

@@ -6,18 +6,19 @@ export default function NavBar() {
 
   function removeCookies() {
     localStorage.clear();
-    var res = document.cookie;
-    var multiple = res.split(";");
-    for (var i = 0; i < multiple.length; i++) {
-      var key = multiple[i].split("=");
+    let res = document.cookie;
+    let multiple = res.split(";");
+    for (let i = 0; i < multiple.length; i++) {
+      let key = multiple[i].split("=");
       document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
     }
   }
+
   return (
     <div className="header">
-      <a className="home" href="/" id="logo" target="_blank">
+      <p className="home" href="/" id="logo">
         Rock Paper Scissors
-      </a>
+      </p>
 
       <nav>
         <ul>
@@ -31,12 +32,19 @@ export default function NavBar() {
           ) : null}
           {cookieValue ? (
             <li>
-              <a href="/my-scores">My scores</a>
+              <a href={`/profile/${localStorage.getItem("username")}`}>
+                My scores
+              </a>
             </li>
           ) : null}
           {cookieValue ? (
             <li>
               <a href="/high-scores">High Score</a>
+            </li>
+          ) : null}
+          {cookieValue ? (
+            <li>
+              <a href="/community">Community</a>
             </li>
           ) : null}
           {!cookieValue ? (

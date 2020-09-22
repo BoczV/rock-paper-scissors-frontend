@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import "../styles/Game.css";
+import "../styles/Buttons.scss";
 import Axios from "axios";
+import Draw from "./Draw";
+import Win from "./Win";
+import Lost from "./Lost";
+import Play from "./Play";
 
 function Game() {
   const cookieValue = document.cookie.split("=")[1];
@@ -17,12 +21,13 @@ function Game() {
   }, [cookieValue]);
 
   const play = (chosenOption) => {
-    setRound(round + 1);
-    setPlayerDecision(chosenOption);
-    let options = ["rock", "paper", "scissors"];
+    const options = ["rock", "paper", "scissors"];
     const random = Math.floor(Math.random() * options.length);
-    setAiDecision(options[random]);
-    comparison();
+    let aiDec = options[random];
+    setPlayerDecision(chosenOption);
+    setAiDecision(aiDec);
+    comparison(chosenOption, aiDec);
+    setRound(round + 1);
   };
 
   useEffect(() => {
@@ -38,112 +43,46 @@ function Game() {
     if (round === 3) {
       setTimeout(function () {
         setRound(round + 1);
-      }, 1500);
-      setTimeout(function () {
-        sendPoints();
-        window.location.replace("/");
-      }, 2000);
+      }, 1000);
+      sendPoints();
     }
   }, [aiScore, playerScore, round]);
 
-  const comparison = () => {
-    if (AiDecision === "rock") {
-      if (playerDecision === "rock") {
-        setAiScore(aiScore + 1);
-        setPlayerScore(playerScore + 1);
-      } else if (playerDecision === "paper") {
-        setPlayerScore(playerScore + 1);
-      } else if (playerDecision === "scissors") {
-        setAiScore(aiScore + 1);
-      }
-    } else if (AiDecision === "paper") {
-      if (playerDecision === "rock") {
-        setAiScore(aiScore + 1);
-      } else if (playerDecision === "paper") {
-        setAiScore(aiScore + 1);
-        setPlayerScore(playerScore + 1);
-      } else if (playerDecision === "scissors") {
-        setPlayerScore(playerScore + 1);
-      }
-    } else if (AiDecision === "scissors") {
-      if (playerDecision === "rock") {
-        setPlayerScore(playerScore + 1);
-      } else if (playerDecision === "paper") {
-        setAiScore(aiScore + 1);
-      } else if (playerDecision === "scissors") {
-        setAiScore(aiScore + 1);
-        setPlayerScore(playerScore + 1);
-      }
+  function comparison(chosenOption, aiDec) {
+    if (aiDec === "rock") {
+      decideWhoGetsPoint(chosenOption, "paper", "scissors");
+    } else if (aiDec === "paper") {
+      decideWhoGetsPoint(chosenOption, "scissors", "rock");
+    } else {
+      decideWhoGetsPoint(chosenOption, "rock", "paper");
     }
-  };
+  }
+
+  function decideWhoGetsPoint(chosenOption, option1, option2) {
+    if (chosenOption === option1) {
+      setPlayerScore(playerScore + 1);
+    } else if (chosenOption === option2) {
+      setAiScore(aiScore + 1);
+    }
+  }
 
   return (
     <div>
       {round < 4 ? (
-        <>
-          <div>
-            <h1>Round:</h1>
-            <h2>{round}</h2>
-          </div>
-          <div className="scores">
-            <div>
-              <h2>Player score:</h2>
-              <h2>{playerScore}</h2>
-            </div>
-            <div>
-              <h2>AI score:</h2>
-              <h2>{aiScore}</h2>
-            </div>
-          </div>
-          <div>
-            {playerDecision === "rock" ? (
-              <img src="Rock.png" alt="" />
-            ) : playerDecision === "paper" ? (
-              <img src="Paper.png" alt="" />
-            ) : playerDecision === "scissors" ? (
-              <img src="Scissors.png" alt="" />
-            ) : null}
-            {AiDecision === "rock" ? (
-              <img src="Rock.png" alt="" />
-            ) : AiDecision === "paper" ? (
-              <img src="Paper.png" alt="" />
-            ) : AiDecision === "scissors" ? (
-              <img src="Scissors.png" alt="" />
-            ) : null}
-          </div>
-          <div className="buttons">
-            <button onClick={() => play("rock")}>
-              <img src="Rock.png" alt="" />
-            </button>
-            <button onClick={() => play("paper")}>
-              <img src="Paper.png" alt="" />
-            </button>
-            <button onClick={() => play("scissors")}>
-              <img src="Scissors.png" alt="" />
-            </button>
-          </div>
-        </>
+        <Play
+          playerScore={playerScore}
+          aiScore={aiScore}
+          round={round}
+          play={play}
+          playerDecision={playerDecision}
+          AiDecision={AiDecision}
+        />
       ) : playerScore === aiScore ? (
-        <>
-          <h1>Draw!</h1>
-          <h2>
-            {playerScore}:{aiScore}
-          </h2>
-        </>
+        <Draw playerScore={playerScore} aiScore={aiScore} />
       ) : playerScore > aiScore ? (
-        <>
-          <h1>Player won!</h1>
-          <h2>
-            {playerScore}:{aiScore}
-          </h2>
-        </>
+        <Win playerScore={playerScore} aiScore={aiScore} />
       ) : (
-        <>
-          <h1>AI won!</h1>
-          <h2>
-            {playerScore}:{aiScore}
-          </h2>
-        </>
+        <Lost playerScore={playerScore} aiScore={aiScore} />
       )}
     </div>
   );
